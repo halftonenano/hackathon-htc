@@ -1,113 +1,193 @@
-import Image from 'next/image'
+'use client';
+
+import ScenarioCard from '@/components/home/ScenarioCard';
+import SlidingText from '@/components/home/SlidingText';
+import { languages as items } from '@/utils/languages';
+import { scenarios } from '@/utils/scenarios';
+import { tw } from '@/utils/tailwind';
+import Downshift from 'downshift';
+import { AnimatePresence, motion } from 'framer-motion';
+import Cookies from 'js-cookie';
+import { ArrowRight, Globe2 } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import ScrollContainer from 'react-indiana-drag-scroll';
 
 export default function Home() {
+  const [language, setLanguage] = useState('spanish');
+
+  const [tag, setTag] = useState('all');
+
+  useEffect(() => {
+    Cookies.set(
+      'language',
+      language.charAt(0).toUpperCase() + String(language).slice(1),
+    );
+  }, [language]);
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <main className="flex h-screen w-screen items-end overflow-hidden">
+      <SlidingText />
+      <div className="fixed right-6 top-6">
+        <Downshift
+          initialSelectedItem={{ value: Cookies.get('language') || '' }}
+          onChange={(selection) => {
+            if (selection) setLanguage(selection.value);
+          }}
+          itemToString={(item) => (item ? item.value : '')}
+        >
+          {({
+            getInputProps,
+            getItemProps,
+            getMenuProps,
+            getToggleButtonProps,
+            inputValue,
+            isOpen,
+          }) => (
+            <div>
+              <div className="flex h-9 gap-2">
+                <div className="grid aspect-square h-full place-items-center rounded-md border backdrop-blur-md">
+                  <Globe2 size={20} />
+                </div>
+                <div {...getToggleButtonProps()}>
+                  <div className="flex h-full items-center gap-3 rounded-md border backdrop-blur-md">
+                    <input
+                      className="h-full bg-transparent px-3 focus:outline-none"
+                      placeholder="Select a language"
+                      {...getInputProps()}
+                    />
+                  </div>
+                </div>
+              </div>
+              {isOpen && (
+                <ul
+                  {...getMenuProps()}
+                  className="relative z-20 mt-1 max-h-44 overflow-hidden overflow-y-auto rounded-md border shadow-md backdrop-blur-md"
+                >
+                  {items
+                    .filter(
+                      (item) =>
+                        !inputValue ||
+                        item.value
+                          .toLowerCase()
+                          .includes(inputValue.toLowerCase()),
+                    )
+                    .map((item, index) => (
+                      <li
+                        className="z-20 cursor-pointer px-4 py-1.5 transition-all hover:bg-neutral-200"
+                        {...getItemProps({
+                          key: `${item.value}${index}`,
+                          item,
+                          index,
+                        })}
+                      >
+                        {item.value}
+                      </li>
+                    ))}
+                </ul>
+              )}
+            </div>
+          )}
+        </Downshift>
+      </div>
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-6 p-10 pb-0">
+          <div className="-mb-3 text-7xl font-bold">realingo</div>
+
+          <div className="flex items-end justify-between">
+            <div className="flex w-fit gap-2 rounded-lg border p-2 font-bold text-white shadow-md">
+              <div
+                onClick={() => {
+                  setTag((prev) => (prev === 'easy' ? 'all' : 'easy'));
+                }}
+                className={tw(
+                  'grid w-32 cursor-pointer place-items-center rounded-md bg-emerald-500 py-1 transition-[transform,background] duration-500 ease-in-out',
+                  tag === 'easy' && 'z-10 scale-95 bg-emerald-700',
+                )}
+              >
+                easy
+              </div>
+              <div
+                onClick={() => {
+                  setTag((prev) => (prev === 'medium' ? 'all' : 'medium'));
+                }}
+                className={tw(
+                  'grid w-32 cursor-pointer place-items-center rounded-md bg-amber-500 py-1 transition-[transform,background] duration-500 ease-in-out',
+                  tag === 'medium' && 'z-10 scale-95 bg-amber-700',
+                )}
+              >
+                medium
+              </div>
+              <div
+                onClick={() => {
+                  setTag((prev) => (prev === 'hard' ? 'all' : 'hard'));
+                }}
+                className={tw(
+                  'grid w-32 cursor-pointer place-items-center rounded-md bg-red-500 py-1 transition-[transform,background] duration-500 ease-in-out',
+                  tag === 'hard' && 'scale-95 bg-red-700',
+                )}
+              >
+                hard
+              </div>
+              <div
+                onClick={() => {
+                  setTag((prev) => (prev === 'funny' ? 'all' : 'funny'));
+                }}
+                className={tw(
+                  'grid w-32 cursor-pointer place-items-center rounded-md bg-gradient-to-r from-violet-500 to-fuchsia-500 py-1 transition-[transform,background] duration-500 ease-in-out',
+                  tag === 'funny' && 'scale-95 from-violet-700 to-fuchsia-700',
+                )}
+              >
+                funny
+              </div>
+            </div>
+            <div className="pointer-events-none flex items-center gap-3 font-bold">
+              <div>Drag to Scroll</div>
+              <ArrowRight className="mb-0.5" />
+            </div>
+          </div>
         </div>
+
+        <ScrollContainer
+          hideScrollbars
+          className="flex w-screen p-8 pr-52 pt-0"
+        >
+          <AnimatePresence>
+            {scenarios
+              .filter((item) => tag === 'all' || item.tag === tag)
+              .map((scenario, index) => (
+                <motion.div
+                  className="shrink-0 overflow-hidden"
+                  key={scenario.id}
+                  initial={{ width: 0, opacity: 0 }}
+                  animate={{
+                    width: 'auto',
+                    opacity: 1,
+                    transition: {
+                      type: 'spring',
+                      bounce: 0,
+                      duration: 0.7,
+                    },
+                  }}
+                  exit={{ width: 0, opacity: 0 }}
+                >
+                  <div className="px-3">
+                    <ScenarioCard
+                      id={scenario.id}
+                      title={scenario.name}
+                      objective={scenario.objective}
+                      description={scenario.description}
+                      tag={scenario.tag}
+                      from={scenario.color_from}
+                      to={scenario.color_to}
+                    />
+                  </div>
+                </motion.div>
+              ))}
+          </AnimatePresence>
+          <div className="w-80 shrink-0"></div>
+        </ScrollContainer>
       </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore the Next.js 13 playground.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+      8{' '}
     </main>
-  )
+  );
 }

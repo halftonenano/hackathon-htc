@@ -9,15 +9,36 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tippyjs/react": "^4.2.6",
+    "@types/js-cookie": "^3.0.3",
     "@types/node": "20.5.8",
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
+    "@upstash/ratelimit": "^0.4.4",
+    "@upstash/redis": "^1.22.0",
+    "@vercel/edge": "^1.0.1",
+    "ai": "^2.2.11",
     "autoprefixer": "10.4.15",
+    "clsx": "^2.0.0",
+    "downshift": "^8.1.0",
+    "encoding": "^0.1.13",
+    "framer-motion": "^10.16.2",
+    "js-cookie": "^3.0.5",
+    "lucide-react": "^0.274.0",
     "next": "13.4.19",
+    "openai": "^4.4.0",
     "postcss": "8.4.29",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-indiana-drag-scroll": "^2.2.0",
+    "react-use-measure": "^2.1.1",
+    "react-wrap-balancer": "^1.1.0",
+    "tailwind-merge": "^1.14.0",
+    "tailwind-scrollbar": "^3.0.5",
     "tailwindcss": "3.3.3",
     "typescript": "5.2.2"
+  },
+  "devDependencies": {
+    "prettier-plugin-tailwindcss": "^0.5.4"
   }
 }

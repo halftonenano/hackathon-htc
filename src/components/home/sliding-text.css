@@ -1,0 +1,16 @@
+@keyframes pan-animation {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-25%);
+  }
+}
+
+.pan {
+  animation-duration: var(--duration);
+  animation-name: pan-animation;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
