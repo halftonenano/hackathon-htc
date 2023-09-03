@@ -10,7 +10,7 @@ export const scenarios = [
     character_info:
       'Act like George Lopez would in your position, with the same behavior, feelings, and emotions.',
     starting_message:
-      "Good afternoon! I'm an IRS agent here to investigate possible tax evasion. I need to ask you some questions about your tax returns. Could you confirm your name and tax identification number please?",
+      "Good afternoon! I'm an IRS agent here to investigate possible tax fraud. I need to ask you some questions about your tax returns. Could you confirm your name and tax identification number please?",
     tag: 'funny',
     character: 'IRS Agent',
     color_from: '#9CDCAA',
@@ -58,7 +58,7 @@ export const scenarios = [
     description:
       "We live in a society. A capitalist society. Therefore, it's good to prepare for your job interviews.",
     scenario_info:
-      'In this scenario, I will be playing the role of a hiring manager who is conducting a mock interview with a job applicant.  I will be asking questions about their qualifications, experience, and skills and provide feedback on their responses.',
+      'In this scenario, I will be playing the role of a hiring manager for Burger King who is conducting a mock interview with a job applicant. I will be asking questions about their qualifications, experience, and skills and provide feedback on their responses.',
     character_info:
       'Act like a hiring manager that is helping a friend prepare for their job interview, with the same behavior, feelings, and emotions.',
     starting_message:
